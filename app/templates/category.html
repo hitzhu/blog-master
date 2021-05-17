@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Fly - {{ category.name }}{% endblock %}
+
+{% block page_content %}
+<h1><strong>{{ category.name }}</strong></h1>
+{% include '_index_posts.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.category',id=category.id) }}
+</div>
+{% endif %}
+{% endblock %}

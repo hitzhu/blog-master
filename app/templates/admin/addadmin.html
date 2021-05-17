@@ -1,0 +1,15 @@
+{% extends "admin/edit.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Fly-添加管理员{% endblock %}
+
+
+{% block page_content %}
+<div class="page-header">
+    <h1>添加管理员</h1>
+</div>
+<div class="col-md-4">
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}

@@ -1,0 +1,60 @@
+<ul class="posts">
+    {% for post in posts %}
+    <li class="post">
+        <div class="post-thumbnail">
+
+            <a href="{{ url_for('.user', username=post.author.username) }}">
+            {% if post.author.username == "wen" %} 
+                <img class="img-rounded profile-thumbnail" src="../static/img/me.jpg" style="width:40px;height:40px;">
+            {% else %}
+                <img class="img-rounded profile-thumbnail" src="../static/img/other.jpg" style="width:40px;height:40px;">
+            {% endif %}
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-date">发布于:{{ moment(post.timestamp).fromNow() }} <br>
+            From <a href="#"> {{post.category.name}} </a></div>
+            <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
+            <div class="post-head">
+            <a href="{{ url_for('.post', id=post.id) }}"><h2>{{ post.head }} <small></a>&nbsp;&nbsp;&nbsp;阅读:{{ post.visits }}&nbsp;收藏:{{ post.stared.__len__() }}</small></h2>
+            </div>
+            <div class="post-body">
+                <a style="text-decoration:none; color:black" href="{{ url_for('.post', id=post.id) }}">
+                {% if post.body_html %}
+                    {{ post.head_html | safe }}<br/>
+                    {% if post.body[200] %}
+                    {{ post.body_html[0:200] | safe }}....
+                    {% else %}
+                    {{ post.body_html | safe }}
+                    {% endif %}
+                {% else %}
+                    {{ post.head }}<br/>
+                    {% if post.body[200] %}
+                    {{ post.body[0:200]}}...
+                    {% else %}
+                    {{ post.body}}
+                    {% endif %}                
+                {% endif %}
+                </a>
+            </div>
+            <div class="post-footer">
+                {% if current_user == post.author %}
+                <a href="{{ url_for('.edit', id=post.id) }}">
+                    <span class="label label-default">编辑</span>
+                </a>
+                {% elif current_user.is_administrator() %}
+                <a href="{{ url_for('.edit', id=post.id) }}">
+                    <span class="label label-danger">编辑 [Admin权限]</span>
+                </a>
+                {% endif %}
+<!--                 <a href="{{ url_for('.post', id=post.id) }}">
+                    <span class="label label-default">阅读全文</span>
+                </a> -->
+                <a href="{{ url_for('.post', id=post.id) }}#comments">
+                    <span class="label label-primary">{{ post.comments.count() }} 评论</span>
+                </a>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>

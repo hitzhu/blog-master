@@ -1,0 +1,77 @@
+{% extends "admin/edit.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Fly-admin用户管理{% endblock %}
+
+
+
+{% block page_content %}
+<h1><strong> {{ current_user.username }},欢迎来到Blog后台 </strong><small>{{ moment(g.current_time).format('LLL') }}</small></h1>
+
+<!--     <p>That was {{ moment(g.current_time).fromNow(refresh=True) }}</p>
+<script >
+document.write("现在是"+(new Date()).toLocaleDateString() + " " + (new Date()).toLocaleTimeString());     
+// 时间
+</script>  -->
+<div class="btn-group">
+<a href="{{ url_for('admin.edit') }}" class="btn btn-default" >后台管理员</a>
+<a href="{{ url_for('admin.edituser') }}" class="btn btn-info">所有用户</a>
+<a href="{{ url_for('admin.editpost') }}" class="btn btn-default">文章管理</a>
+<a href="{{ url_for('admin.editcategory') }}" class="btn btn-default">分类管理</a>
+<a href="{{ url_for('admin.editcomment') }}" class="btn btn-default">评论管理</a>
+</div>
+</br>
+
+
+<h3><strong>用户列表</strong>
+<a href="{{ url_for('admin.adduser') }}">&nbsp;<small>添加普通用户</small><i class="fa fa-plus"></i></a>
+
+</h3>
+<div class="row">
+ <div class="col-xs-12">
+    <div class="box-body table-responsive no-padding">
+      <table class="table table-hover">
+        <tr>
+          <th>用户</th>          
+          <th>注册时间</th>
+          <th>操作</th>          
+        </tr>
+        {% for user in users %}
+        <tr>
+          {% if user.username  %}
+	          <td><a href="{{ url_for('main.user',username=user.username) }}">{{ user.username }}</a></td>          
+	          <td>{{ moment(user.member_since).format('L') }}</td>          
+	          {% if not user.is_administrator() %}
+		          <td><a href="{{ url_for('admin.deleteuser',id=user.id) }}" class="label label-danger">
+		              删除用户
+		              </a>
+		          </td>
+            {% elif user.is_administrator() and user != current_user %}
+              <td><a href="#" class="label label-default">
+                  删除Admin
+                  </a>
+              </td>
+            {% else %}
+              <td><a href="#" class="label label-default">
+                  花式作死
+                  </a>
+              </td>
+	          {% endif %}
+	      {% endif %}
+        </tr>
+        {% endfor %}
+      </table>
+    </div><!-- /.box-body -->
+<!--   </div> --><!-- /.box -->
+</div>
+</div>
+{% if pagination %}
+
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.edituser') }}
+</div>
+{% endif %}
+
+{% endblock %}
+

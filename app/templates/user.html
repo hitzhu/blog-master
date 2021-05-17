@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Fly - {{ user.username }}{% endblock %}
+
+{% block page_content %}
+{% include '_userbase.html' %}
+<div class="btn-group">
+<a href="{{ url_for('.user',username=user.username)}}" class="btn btn-info" >{{ user.posts.count() }}篇博客</a>
+<a href="{{ url_for('.usercomments',username=user.username)}}" class="btn btn-default">{{ user.comments.count() }}条评论</a>
+<a href="{{ url_for('.starposts', username=user.username) }}" class="btn btn-default">{{ user.starposts.__len__() }}篇收藏</a>
+</div>
+</br>
+{% include '_posts.html' %}
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.user', username=user.username) }}
+</div>
+{% endif %}
+{% endblock %}

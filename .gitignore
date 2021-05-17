@@ -1,0 +1,7 @@
+*.pyc
+*.exe
+__pycache__/
+migrations/
+.idea/
+# Project exclude paths
+/venv/

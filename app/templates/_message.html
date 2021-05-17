@@ -1,0 +1,34 @@
+{% if current_user.is_authenticated %} 
+<ol class="comment">
+        {% for message in messages %}  
+            {% if message.sendto == current_user %}
+            <li class="comment">
+                <div class="comment-thumbnail">
+                    <a href="{{ url_for('.user', username=message.sendto.username) }}">
+                        <img class="img-rounded profile-thumbnail" src="{{ message.author.gravatar(size=40) }}">
+                    </a>
+                </div>
+                <div class="comment-content">
+                    <div class="comment-date">{{ message.timestamp}}</div>
+                    <div class="comment-sendto">来自<a href="{{ url_for('.user', username=message.author.username) }}">{{ message.author.username }}</a>的消息:</div>
+                        <div class="comment-body">
+                        {{ message.body }}                         
+                        </div>                     
+                    {% if message %}
+                    <br>                   
+                        {% if not message.confirmed %}
+                        <a class="btn btn-danger btn-xs" href="{{ url_for('.showmessage_unconfirmed', id=message.id, page=page) }}">标记为已读</a> 
+                        {% else %}
+                        <a class="btn btn-default btn-xs" href="{{ url_for('.showmessage_confirmed', id=message.id, page=page) }}">标记为未读</a> 
+                        {% endif %}
+                        <a href="{{ url_for('.message_delete', id=message.id, page=page) }}" class="btn btn-danger btn-xs">删除</a>
+                        <a href="{{ url_for('.sendmessage', username=message.author.username) }}" class="btn btn-default btn-xs">回复</a>
+
+
+                    {% endif %}                 
+                </div>
+            </li>  
+            {% endif %}    
+        {% endfor %}
+</ol>
+{% endif %}
